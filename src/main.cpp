@@ -1,9 +1,16 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <filesystem>
+#include <vector>
+#include <sstream>
+#include <unistd.h>
+
 
 int main()
 {
-  std::string builtin[] = {"type", "echo", "exit"};
+  const char *path_value = std::getenv("PATH");
+  const std::string builtin[] = {"type", "echo", "exit"};
   while (true)
   {
     std::cout << std::unitbuf;
@@ -32,13 +39,13 @@ int main()
     // type
     else if (input.substr(0, 4) == "type")
     {
-      if(input == "type")
+      if (input == "type")
       {
         std::cout << "Wrong usage: type `command_name`";
       }
 
       bool found = false;
-      for (int i = 0; i < sizeof(builtin)/sizeof(builtin[0]); i++)
+      for (int i = 0; i < sizeof(builtin) / sizeof(builtin[0]); i++)
       {
         if (input.substr(5) == builtin[i])
         {
@@ -50,18 +57,25 @@ int main()
 
       if (!found)
       {
-        
+        std::string path_str(path_value);
+        std::stringstream ss(path_str);
+        std::string segment;
+        std::string command = input.substr(5);
+        while (std::getline(ss, segment, ':'))
+        {
+          std::string fullpath = segment + "/" + command;
+          if(access(fullpath.c_str(), X_OK == 0))
+          {
+            std::cout << command << " is " << fullpath;
+            found = true;
+            break;
+          }
+        }
       }
 
-      else if (!found)
+      if(!found)
       {
-        std::cout << input.substr(5) << ": not found" << std::endl;
+        std::cout << input << ": command not found" << "\n";
       }
-    }
-
-    else
-    {
-      std::cout << input << ": command not found" << "\n";
     }
   }
-}
