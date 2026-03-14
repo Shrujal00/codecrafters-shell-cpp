@@ -6,7 +6,6 @@
 #include <sstream>
 #include <unistd.h>
 
-
 int main()
 {
   const char *path_value = std::getenv("PATH");
@@ -64,7 +63,7 @@ int main()
         while (std::getline(ss, segment, ':'))
         {
           std::string fullpath = segment + "/" + command;
-          if(access(fullpath.c_str(), X_OK == 0))
+          if (access(fullpath.c_str(), X_OK == 0))
           {
             std::cout << command << " is " << fullpath;
             found = true;
@@ -73,9 +72,12 @@ int main()
         }
       }
 
-      if(!found)
+      if (!found)
       {
         std::cout << input << ": command not found" << "\n";
       }
     }
+
+    
   }
+}
