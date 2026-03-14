@@ -65,7 +65,7 @@ int main()
           std::string fullpath = segment + "/" + command;
           if (access(fullpath.c_str(), X_OK == 0))
           {
-            std::cout << command << " is " << fullpath;
+            std::cout << command << " is " << fullpath << std::endl;
             found = true;
             break;
           }
@@ -78,6 +78,6 @@ int main()
       }
     }
 
-    
+
   }
 }
