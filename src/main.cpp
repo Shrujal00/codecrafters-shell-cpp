@@ -36,7 +36,7 @@ int main()
       {
         std::cout << "Wrong usage: type `command_name`";
       }
-      for (int i = 0; i < builtin->size(); i++)
+      for (int i = 0; i < sizeof(builtin)/sizeof(builtin[0]); i++)
       {
         if (input.substr(5) == builtin[i])
         {
