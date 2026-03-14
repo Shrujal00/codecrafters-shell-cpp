@@ -43,8 +43,13 @@ int main()
           std::cout << builtin[i] << " is a shell builtin" << std::endl;
           break;
         }
+        
+        else
+        {
+          std::cout << input.substr(5) << ": not found" << std::endl;
+        }
       }
-      std::cout << input.substr(5) << ": not found" << std::endl;
+      
     }
 
     else
