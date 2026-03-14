@@ -36,20 +36,22 @@ int main()
       {
         std::cout << "Wrong usage: type `command_name`";
       }
+
+      bool found = false;
       for (int i = 0; i < sizeof(builtin)/sizeof(builtin[0]); i++)
       {
         if (input.substr(5) == builtin[i])
         {
           std::cout << builtin[i] << " is a shell builtin" << std::endl;
+          found = true;
           break;
         }
-        
-        else
-        {
-          std::cout << input.substr(5) << ": not found" << std::endl;
-        }
       }
-      
+
+      if (!found)
+      {
+        std::cout << input.substr(5) << ": not found" << std::endl;
+      }
     }
 
     else
