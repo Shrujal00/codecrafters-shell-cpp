@@ -41,6 +41,7 @@ int main()
         if (input.substr(5) == builtin[i])
         {
           std::cout << builtin[i] << " is a shell builtin" << std::endl;
+          break;
         }
       }
       std::cout << input.substr(5) << ": not found" << std::endl;
