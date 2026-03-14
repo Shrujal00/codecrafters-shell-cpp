@@ -50,6 +50,11 @@ int main()
 
       if (!found)
       {
+        
+      }
+
+      else if (!found)
+      {
         std::cout << input.substr(5) << ": not found" << std::endl;
       }
     }
