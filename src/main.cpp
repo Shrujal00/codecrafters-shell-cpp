@@ -1,10 +1,10 @@
-#include <iostream>
-#include <string>
 #include <cstdlib>
 #include <filesystem>
-#include <vector>
+#include <iostream>
 #include <sstream>
+#include <string>
 #include <unistd.h>
+#include <vector>
 
 int main()
 {
@@ -12,18 +12,17 @@ int main()
   const std::string builtin[] = {"type", "echo", "exit"};
   while (true)
   {
+
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;
     std::cout << "$ ";
     std::string input;
     std::getline(std::cin, input);
-
     // exit
     if (input == "exit")
     {
       break;
     }
-
     // echo
     else if (input.substr(0, 4) == "echo")
     {
@@ -63,7 +62,8 @@ int main()
         while (std::getline(ss, segment, ':'))
         {
           std::string fullpath = segment + "/" + command;
-          if (access(fullpath.c_str(), X_OK == 0))
+          if (std::filesystem::exists(fullpath) &&
+              access(fullpath.c_str(), X_OK) == 0)
           {
             std::cout << command << " is " << fullpath << std::endl;
             found = true;
@@ -74,10 +74,12 @@ int main()
 
       if (!found)
       {
-        std::cout << input << ": command not found" << "\n";
+        std::cout << input.substr(5) << ": not found" << "\n";
       }
     }
-
-
+    else
+    {
+      std::cout << input << ": command not found" << "\n";
+    }
   }
 }
