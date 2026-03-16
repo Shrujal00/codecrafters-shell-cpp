@@ -96,7 +96,13 @@ int main()
         std::cout << input.substr(5) << ": not found" << "\n";
       }
     }
-
+    // pwd
+    else if (input == "pwd")
+    {
+      std::filesystem::path currentPath = std::filesystem::current_path();
+      std::string pathstring = currentPath.u8string();
+      std::cout << pathstring << std::endl;
+    }
     // IF the command is a executable then run it
 
     else if (find_in_path(input.substr(0, input.find(' ')), path_value) != "")
