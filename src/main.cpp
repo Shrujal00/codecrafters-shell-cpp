@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <vector>
 #include <sys/wait.h>
-
+#include <climits>
 std::string find_in_path(const std::string &command, const char *path_value)
 {
   std::string path_string(path_value);
@@ -28,7 +28,7 @@ std::string find_in_path(const std::string &command, const char *path_value)
 int main()
 {
   const char *path_value = std::getenv("PATH");
-  const std::string builtin[] = {"type", "echo", "exit"};
+  const std::string builtin[] = {"type", "echo", "exit", "pwd"};
   while (true)
   {
 
@@ -99,9 +99,9 @@ int main()
     // pwd
     else if (input == "pwd")
     {
-      std::filesystem::path currentPath = std::filesystem::current_path();
-      std::string pathstring = currentPath.u8string();
-      std::cout << pathstring << std::endl;
+      char buffer[PATH_MAX];
+      std::string pwd = getcwd(buffer, PATH_MAX);
+      std::cout << pwd << std::endl;
     }
     // IF the command is a executable then run it
 
