@@ -5,6 +5,25 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include <sys/wait.h>
+
+std::string find_in_path(const std::string &command, const char *path_value)
+{
+  std::string path_string(path_value);
+  std::stringstream ss(path_string);
+  std::string segment;
+
+  while (std::getline(ss, segment, ':'))
+  {
+    std::string fullpath = segment + "/" + command;
+    if (std::filesystem::exists(fullpath) && access(fullpath.c_str(), X_OK) == 0)
+    {
+      return fullpath;
+    }
+  }
+
+  return "";
+}
 
 int main()
 {
@@ -77,6 +96,40 @@ int main()
         std::cout << input.substr(5) << ": not found" << "\n";
       }
     }
+
+    // IF the command is a executable then run it
+
+    else if (find_in_path(input.substr(0, input.find(' ')), path_value) != "")
+    {
+      std::string args[100];
+      int argsc = 0;
+      std::stringstream ss(input);
+      std::string token;
+
+      while (ss >> token)
+      {
+        args[argsc] = token;
+        argsc++;
+      }
+
+      const char* argv[101];
+      for(int i = 0; i < argsc; i++)
+      {
+        argv[i] = args[i].c_str();
+      }
+
+      argv[argsc] = nullptr;
+
+
+      pid_t pid = fork();
+      if (pid == 0)
+      {
+         execvp(args[0].c_str(), (char* const*)argv);
+      } else {
+        wait(nullptr);
+      }
+    }
+
     else
     {
       std::cout << input << ": command not found" << "\n";
