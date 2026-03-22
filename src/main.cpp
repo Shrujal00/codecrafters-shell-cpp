@@ -164,6 +164,13 @@ int main()
         std::cerr << "cd: " << new_path << ": No such file or directory" << std::endl;
       }
     }
+
+    else if(input == "~")
+    {
+      const char* user = std::getenv("USER");
+      fs::path home = fs::path("/home") / user;
+      fs::current_path(home);
+    }
     
 
     else
