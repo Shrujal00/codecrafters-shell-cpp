@@ -7,6 +7,10 @@
 #include <vector>
 #include <sys/wait.h>
 #include <climits>
+
+namespace fs = std::filesystem;
+
+
 std::string find_in_path(const std::string &command, const char *path_value)
 {
   std::string path_string(path_value);
@@ -28,10 +32,9 @@ std::string find_in_path(const std::string &command, const char *path_value)
 int main()
 {
   const char *path_value = std::getenv("PATH");
-  const std::string builtin[] = {"type", "echo", "exit", "pwd"};
+  const std::string builtin[] = {"type", "echo", "exit", "pwd", "cd"};
   while (true)
   {
-
     std::cout << std::unitbuf;
     std::cerr << std::unitbuf;
     std::cout << "$ ";
@@ -52,6 +55,13 @@ int main()
       }
       std::cout << input.substr(5) << std::endl;
     }
+
+    //sgfunc
+    else if(input == "sg")
+    {
+      std::cout << "Hello Shrujal how are you doing ??" << std::endl;
+    }
+
 
     // type
     else if (input.substr(0, 4) == "type")
@@ -104,7 +114,6 @@ int main()
       std::cout << pwd << std::endl;
     }
     // IF the command is a executable then run it
-
     else if (find_in_path(input.substr(0, input.find(' ')), path_value) != "")
     {
       std::string args[100];
@@ -136,9 +145,31 @@ int main()
       }
     }
 
-    else
+    //cd
+    if (input.substr(0,2) == "cd")
     {
-      std::cout << input << ": command not found" << "\n";
+      fs::path currentPath = fs::current_path();
+      std::string new_path = input.substr(3);
+
+      // fs::current_path(new_path);
+
+      try
+      {
+        fs::current_path(new_path);
+        std::cout << new_path << std::endl;
+      }
+      catch(fs::filesystem_error const& ex)
+      {
+        std::cerr << "cd: " << new_path << ": No such file or directory" << std::endl;
+      }
+
+
     }
+    
+
+    // else
+    // {
+    //   std::cout << input << ": command not found" << "\n";
+    // }
   }
 }
