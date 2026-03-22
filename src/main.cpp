@@ -142,8 +142,6 @@ int main()
       {
         wait(nullptr);
       }
-
-      std::cout << std::endl;
     }
 
     // cd
