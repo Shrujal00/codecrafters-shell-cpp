@@ -157,6 +157,7 @@ int main()
       {
         fs::current_path(new_path);
         std::cout << new_path << std::endl;
+        continue;
       }
       catch(fs::filesystem_error const& ex)
       {
