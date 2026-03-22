@@ -146,7 +146,7 @@ int main()
     }
 
     //cd
-    if (input.substr(0,2) == "cd")
+    else if(input.substr(0,2) == "cd")
     {
       fs::path currentPath = fs::current_path();
       std::string new_path = input.substr(3);
@@ -163,14 +163,15 @@ int main()
       {
         std::cerr << "cd: " << new_path << ": No such file or directory" << std::endl;
       }
-
-
     }
     
 
-    // else
-    // {
-    //   std::cout << input << ": command not found" << "\n";
-    // }
+    else
+    {
+      std::cout << input << ": command not found" << "\n";
+    }
+
+    
+    
   }
 }
