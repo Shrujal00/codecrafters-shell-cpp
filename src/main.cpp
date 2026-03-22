@@ -10,7 +10,6 @@
 
 namespace fs = std::filesystem;
 
-
 std::string find_in_path(const std::string &command, const char *path_value)
 {
   std::string path_string(path_value);
@@ -56,12 +55,11 @@ int main()
       std::cout << input.substr(5) << std::endl;
     }
 
-    //sgfunc
-    else if(input == "sg")
+    // sgfunc
+    else if (input == "sg")
     {
       std::cout << "Hello Shrujal how are you doing ??" << std::endl;
     }
-
 
     // type
     else if (input.substr(0, 4) == "type")
@@ -127,31 +125,41 @@ int main()
         argsc++;
       }
 
-      const char* argv[101];
-      for(int i = 0; i < argsc; i++)
+      const char *argv[101];
+      for (int i = 0; i < argsc; i++)
       {
         argv[i] = args[i].c_str();
       }
 
       argv[argsc] = nullptr;
 
-
       pid_t pid = fork();
       if (pid == 0)
       {
-         execvp(args[0].c_str(), (char* const*)argv);
-      } else {
+        execvp(args[0].c_str(), (char *const *)argv);
+      }
+      else
+      {
         wait(nullptr);
       }
+
+      std::cout << std::endl;
     }
 
-    //cd
-    else if(input.substr(0,2) == "cd")
+    // cd
+    else if (input.substr(0, 2) == "cd")
     {
       fs::path currentPath = fs::current_path();
       std::string new_path = input.substr(3);
 
-      // fs::current_path(new_path);
+      size_t spacePos = input.find(' ');
+
+      if (input.substr(3) == "~")
+      {
+        const char *home = std::getenv("HOME");
+        fs::current_path(home);
+        continue;
+      }
 
       try
       {
@@ -159,26 +167,15 @@ int main()
         // std::cout << new_path << std::endl;
         continue;
       }
-      catch(fs::filesystem_error const& ex)
+      catch (fs::filesystem_error const &ex)
       {
         std::cerr << "cd: " << new_path << ": No such file or directory" << std::endl;
       }
     }
 
-    else if(input == "~")
-    {
-      const char* user = std::getenv("USER");
-      fs::path home = fs::path("/home") / user;
-      fs::current_path(home);
-    }
-    
-
     else
     {
       std::cout << input << ": command not found" << "\n";
     }
-
-    
-    
   }
 }
